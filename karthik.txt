@@ -1,0 +1,285 @@
+package com.service;
+
+import java.util.Random;
+
+public class Car {
+	private String Brand;
+	private String Model;
+	private String year;
+	private int perDayCost; 
+	private Boolean isAvailable;
+	private  int carId;
+	public Car(String brand, String model, String year, int perDayCost) {
+		super();
+		Brand = brand;
+		Model = model;
+		this.year = year;
+		isAvailable= true;
+		carId=new Random().nextInt(100);
+		this.perDayCost=perDayCost;
+	}
+	
+	
+	public int getPerDayCost() {
+		return perDayCost;
+	}
+
+
+	public void setPerDayCost(int perDayCost) {
+		this.perDayCost = perDayCost;
+	}
+
+
+	public int getCarId() {
+		return carId;
+	}
+
+	public void setCarId(int carId) {
+		this.carId = carId;
+	}
+
+	public String getBrand() {
+		return Brand;
+	}
+	public Boolean getIsAvailable() {
+		return isAvailable;
+	}
+	public void setIsAvailable(Boolean isAvailable) {
+		this.isAvailable = isAvailable;
+	}
+	public void setBrand(String brand) {
+		Brand = brand;
+	}
+	public String getModel() {
+		return Model;
+	}
+	public void setModel(String model) {
+		Model = model;
+	}
+	public String getYear() {
+		return year;
+	}
+	public void setYear(String year) {
+		this.year = year;
+	}
+	
+
+}
+
+
+package com.service;
+
+import java.util.Random;
+
+public class Customer {
+	
+	private int  custId;
+	private String  custName;
+	private Long Number;
+	public Customer( String custName, Long number) {
+		super();
+		this.custId = new Random().nextInt(100);
+		this.custName = custName;
+		Number = number;
+	}
+	public int getCustId() {
+		return custId;
+	}
+	public void setCustId(int custId) {
+		this.custId = custId;
+	}
+	public String getCustName() {
+		return custName;
+	}
+	public void setCustName(String custName) {
+		this.custName = custName;
+	}
+	public Long getNumber() {
+		return Number;
+	}
+	public void setNumber(Long number) {
+		Number = number;
+	}
+	@Override
+	public String toString() {
+		return "Customer [custId=" + custId + ", custName=" + custName + ", Number=" + Number + "]";
+	}
+	
+	
+
+}
+package com.service;
+
+public class Rentals 
+{
+ private	Car car;
+ private	Customer customer;
+ private int days;
+public Rentals(Car car, Customer customer, int days) {
+	super();
+	this.car = car;
+	this.customer = customer;
+	this.days = days;
+}
+public Car getcar() {
+	return car;
+}
+public void setcar(Car car) {
+	this.car = car;
+}
+public Customer getcustomer() {
+	return customer;
+}
+public void setcustomer(Customer customer) {
+	this.customer = customer;
+}
+public int getDays() {
+	return days;
+}
+public void setDays(int days) {
+	this.days = days;
+}
+ 
+	
+	
+	
+}
+package com.service;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+public class RentalManagementSystem 
+{
+	CopyOnWriteArrayList<Car> AvaliableCars ;
+	CopyOnWriteArrayList<Car> BookedCars ;
+	CopyOnWriteArrayList<Rentals> rentals ;
+	public RentalManagementSystem() {
+		super();
+		this. AvaliableCars =new CopyOnWriteArrayList<>() ;
+		this. BookedCars =new CopyOnWriteArrayList<>() ;
+		this.rentals = new CopyOnWriteArrayList<>() ;
+	}
+	
+	public void addCar(Car c)
+	{
+			AvaliableCars.add(c);
+		System.out.println("car id "+c.getCarId()+" Brand  "+c.getBrand()+"  Per Day Cost "+c.getPerDayCost()+" Model "+c.getModel());
+	}
+	
+	public void menu() {
+		while(true) {
+			
+			System.out.println("Welcome To CarRentals ");
+			System.out.println("---------------------------------");
+			System.out.println("1. Book a Car Rental");
+			System.out.println("2. Return Car ");
+			System.out.println("3.  Exit ");
+			
+			System.out.println("Choose One Option  To Procede ");
+			
+			Scanner sc = new Scanner(System.in);
+			int option = sc.nextInt();
+			
+			switch(option) {
+			
+			case 1:
+				System.out.println("Avaliable Cars ");
+				for(Car c:AvaliableCars) {
+					System.out.println("car id      "+c.getCarId()+" Brand       "+c.getBrand()+" Model      "+c.getModel());
+				}
+				String name11 ="";
+				Long  n=0L;
+				System.out.print(" Enter Car id :");
+				int id = sc.nextInt();
+				Car selectedCar = null;
+                for (Car car :  AvaliableCars) {
+                    if (car.getCarId()==id) {
+                        selectedCar = car;
+                        break;
+                    }
+                }
+						if(selectedCar!=null)
+					{
+						System.out.println(" Customer Enter you  details ");
+						System.out.print(" Name  : ");
+						 name11 = sc.next();						
+						System.out.print(" Number : ");
+						n= sc.nextLong();
+						System.out.println("How  many days you want to rent ");
+						int d = sc.nextInt();
+						Customer customer = new Customer(name11, n);
+						Rentals rentalsObj = new Rentals(selectedCar, customer, d);
+						rentals.add(rentalsObj);
+						AvaliableCars.remove(selectedCar);
+						BookedCars.add(selectedCar);
+						System.out.println("Booking Sucessful  "+ customer);
+					}
+						else {
+							
+					
+				}
+				break;
+			case 2:
+				System.out.println("Welcom customer ");
+				System.out.print(" Enter Car id :");
+				int carid2 = sc.nextInt();
+				System.out.print("Customer id :");
+				int custid2 = sc.nextInt();
+				
+				for(Rentals r: rentals) {
+					if(r.getcustomer().getCustId()==custid2&&r.getcar().getCarId()==carid2) 
+					{
+						System.out.println(" Bill  Amount : "+generateBill(r.getDays(), r.getcar()));
+						System.out.println("Enter Amount ");
+						int amount = sc.nextInt();
+						if(amount==generateBill(r.getDays(), r.getcar())) {
+							System.out.println("Payment sucessfull");
+							Car c = r.getcar();
+							AvaliableCars.add(c);
+							BookedCars.remove(c);
+							rentals.remove(r);
+						}
+						else
+						{
+							System.out.println("Entered Wrong Amount ReEnter ");
+						}
+					}
+				}
+				break;
+			case 3: System.out.println("Loged Out sucessudfully");
+			return;
+			default: System.out.println("Wrong Option ");
+			break;
+			}
+			
+		}
+	}
+	
+	
+	public int  generateBill(int days,Car obj) {
+		return obj.getPerDayCost()*days;
+		
+	}
+}
+
+package com.client;
+
+import com.service.Car;
+import com.service.RentalManagementSystem;
+
+public class RentalApplication {
+	public static void main(String[] args) {
+		RentalManagementSystem rms = new RentalManagementSystem();
+		rms.addCar(new Car("Honda", "Creta", "2023", 2000));
+		rms.addCar(new Car("Honda", "venue", "2023", 2000));
+		rms.addCar(new Car("Honda", "verna", "2023", 2000));
+		rms.addCar(new Car("Tata", "Harier", "2023", 2500));
+		rms.menu();
+		
+	}
+
+}
+
+
